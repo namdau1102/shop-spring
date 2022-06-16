@@ -1,0 +1,19 @@
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid #4b8dff;
+    padding: 10px;
+}
+
+.btn{
+    text-transform: none !important;
+}
+.card-body{
+	background: #ffff;
+}
+.img-center{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
