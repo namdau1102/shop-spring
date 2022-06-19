@@ -1,13 +1,19 @@
 package com.project.shop.controllers;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.project.shop.models.*;
 import com.project.shop.repositories.UserRepository;
 import com.project.shop.services.declarations.AddressService;
+import com.project.shop.services.declarations.CategorieService;
 import com.project.shop.services.declarations.MailService;
 import com.project.shop.services.declarations.ShoppingService;
 import com.project.shop.services.declarations.UserService;
+
+import org.apache.kafka.clients.admin.NewTopic;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,11 +22,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Controller
@@ -28,20 +36,21 @@ import java.util.Random;
 public class UserController {
 	private final ShoppingService shoppingService;
 	
-	@Autowired
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
 	private final MailService mailService;
 	private final AddressService addressService;
-
+	private final CategorieService categorieService;
+	
 	@Autowired
 	public UserController(ShoppingService shoppingService, UserService userService, AddressService addressService,
-			MailService mailService,PasswordEncoder passwordEncoder) {
+			MailService mailService,PasswordEncoder passwordEncoder,CategorieService categorieService) {
 		this.shoppingService = shoppingService;
 		this.userService = userService;
 		this.mailService = mailService;
 		this.addressService = addressService;
 		this.passwordEncoder=passwordEncoder;
+		this.categorieService=categorieService;
 	}
 
 	@GetMapping("/restpassword")
@@ -50,6 +59,31 @@ public class UserController {
 		return "restPass";
 	}
 
+	@GetMapping(value = "/add/user")
+	public String addUser(Model model) {
+		model.addAttribute("user",new User());
+		return "addAccount";
+	}
+	
+	@PostMapping(value = "/add/user")
+    @Secured("ROLE_ADMIN")
+	public String addSbUser(Model model,@Valid @ModelAttribute("user") User user) {
+		userService.save(user);
+		return "redirect:/user/add/user";
+	}
+	
+	@GetMapping("/update/user/{id}")
+	public String shwUpdateUser(Model model,@PathVariable("id")User user) {
+		model.addAttribute("user", user);
+		return "editAccount";
+	}
+	@PostMapping("/update/user/{id}")
+	public String updateUser(Model model,@Valid @ModelAttribute("user")User user) {
+		model.addAttribute("user", user);
+		userService.save(user);
+		return "redirect:/user/list";
+	}
+	
 	@GetMapping("/comletionPass")
 	public String showComletionPass(Model model, HttpServletRequest request) {
 		model.addAttribute("useremail", new UserEmail());
@@ -139,6 +173,7 @@ public class UserController {
 	}
 
 	@GetMapping("/cart")
+	@Secured("ROLE_USER")
 	public String getShoppingCart(Model model) {
 		model.addAttribute("cart_items", shoppingService.getCart());
 		return "cartPage";
@@ -217,4 +252,53 @@ public class UserController {
 		addressService.update(address);
 		return "redirect:/";
 	}
+	
+	
+	@GetMapping("/categories")
+	public String listCategories(Model model) {
+		List<Type> listTypes = categorieService.findAll();
+		model.addAttribute("categories", listTypes);
+		return "categoryList";
+	}
+	
+	
+	@GetMapping("/edit/categories/{id}")
+	public String editCategories(Model model,@PathVariable("id") Type type) {
+		model.addAttribute("type", type);
+		return "editCategorie";
+	}
+
+	@GetMapping("/add/categories")
+	public String addCategories(Model model,@Valid @ModelAttribute("type") Type type ) {
+		model.addAttribute("type", type);
+		
+		return "addCategorie";
+	}
+	
+	@PostMapping("/add/categories")
+	public String addPostCategories(Model model,@Valid @ModelAttribute("type") Type type ) {
+		model.addAttribute("type", type);
+		categorieService.save(type);
+		return "redirect:/user/categories";
+	}
+	
+	
+	@PostMapping("/update/categories/{id}")
+	public String updateCategories(@Valid @ModelAttribute("type") Type type,
+                                  BindingResult bindingResult,
+                                  MultipartFile[] multipartFile,
+                                  HttpServletRequest httpServletRequest) {
+		long id = type.getId();
+		categorieService.update(type,id);
+		return "redirect:/user/categories";
+	}
+	
+	@PostMapping("/delete/categories/{id}")
+	public String deleteCategories(@PathVariable("id") Long id) {
+		System.out.println("Id : " + id);
+		categorieService.delete(id);
+		return "redirect:/user/categories";
+	}
+	
+
 }

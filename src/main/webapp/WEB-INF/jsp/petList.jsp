@@ -314,12 +314,16 @@
 						</div>
 					</c:forEach>
 				</div>
-				<c:set var="page" value="${pet_list}" scope="request" />
-				<c:set var="mainUrl" value="pet/list" scope="request" />
+
 			</div>
 
 		</div>
+		<c:set var="page" value="${pet_list}" scope="request" />
+		<c:set var="mainUrl" value="/pet/list" scope="request" />
+		<div style="width: 60%;">
+			<jsp:include page="shared/pagination.jsp" />
 
+		</div>
 	</div>
 
 	<jsp:include page="shared/footer.jsp" />

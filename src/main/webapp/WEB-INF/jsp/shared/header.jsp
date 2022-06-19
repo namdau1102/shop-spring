@@ -634,7 +634,8 @@ input[type=range]::-webkit-slider-thumb {
 
 
 
-	<nav class="navbar navbar-expand-lg navbar-dark blue-gradient" style="display:block">
+	<nav class="navbar navbar-expand-lg navbar-dark blue-gradient"
+		style="display: block">
 		<div class="container">
 			<a class="navbar-brand" href="/"><img width="100px" height="auto"
 				src="/images/logo2.png"></a>
@@ -657,15 +658,15 @@ input[type=range]::-webkit-slider-thumb {
                     </a>
                 </li> -->
 					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle" href="/pet/list"
+						class="nav-link dropdown-toggle" href="/pet/list?page=0&size=2"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Động
 							vật</a>
 						<div class="dropdown-menu dropdown-primary"
 							aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="/pet/list">Tất cả</a>
+							<a class="dropdown-item" href="/pet/list?page=0&size=2">Tất cả</a>
 							<div class="dropdown-divider"></div>
 							<c:forEach var="type" items="${item_types}">
-								<a class="dropdown-item" href="/pet/cat/${type.id}">${type.category}</a>
+								<a class="dropdown-item" href="/pet/cat/${type.id}?page=0&size=2">${type.category}</a>
 							</c:forEach>
 						</div></li>
 
@@ -703,7 +704,8 @@ input[type=range]::-webkit-slider-thumb {
 								aria-labelledby="navbarDropdownMenuLink">
 								<a class="dropdown-item" href="/user/summary">Quản lí sản
 									phẩm</a> <a class="dropdown-item" href="/user/list">Quản lí
-									người dùng</a>
+									người dùng</a> <a class="dropdown-item" href="/user/categories">Quản
+									lí danh muc</a>
 							</div></li>
 					</security:authorize>
 					<!-- Dropdown

@@ -1,0 +1,117 @@
+
+
+
+
+	<nav class="navbar navbar-expand-lg navbar-dark blue-gradient" style="display:block">
+		<div class="container">
+			<a class="navbar-brand" href="/"><img width="100px" height="auto"
+				src="/images/logo2.png"></a>
+
+			<!-- Przycisk -->
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#basicExampleNav" aria-controls="basicExampleNav"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Itemy  -->
+			<div class="collapse navbar-collapse" id="basicExampleNav">
+
+				<ul class="navbar-nav mr-auto">
+					<!-- Links
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Strona główna
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li> -->
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="/pet/list"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Động
+							vật</a>
+						<div class="dropdown-menu dropdown-primary"
+							aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="/pet/list">Tất cả</a>
+							<div class="dropdown-divider"></div>
+							<c:forEach var="type" items="${item_types}">
+								<a class="dropdown-item" href="/pet/cat/${type.id}">${type.category}</a>
+							</c:forEach>
+						</div></li>
+
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="/pet/list"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Thức
+							ăn</a>
+						<div class="dropdown-menu dropdown-primary"
+							aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="/feed/list">Tất cả</a>
+							<div class="dropdown-divider"></div>
+							<c:forEach var="type" items="${item_types}">
+								<a class="dropdown-item" href="/feed/cat/${type.id}">${type.category}</a>
+							</c:forEach>
+						</div></li>
+
+					<li class=" nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="/pet/list"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Phụ
+							kiện</a>
+						<div class="dropdown-menu dropdown-primary"
+							aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="/accessory/list">Tất cả</a>
+							<div class="dropdown-divider"></div>
+							<c:forEach var="type" items="${item_types}">
+								<a class="dropdown-item" href="/accessory/acc/${type.id}">${type.category}</a>
+							</c:forEach>
+						</div></li>
+
+					<security:authorize access="hasRole('ROLE_ADMIN')">
+						<li class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle" id="navbarDropdownMenuLink"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+							<div class="dropdown-menu dropdown-primary"
+								aria-labelledby="navbarDropdownMenuLink">
+								<a class="dropdown-item" href="/user/summary">Quản lí sản
+									phẩm</a> <a class="dropdown-item" href="/user/list">Quản lí
+									người dùng</a>
+							</div></li>
+					</security:authorize>
+					<!-- Dropdown
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">Dropdown</a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li> -->
+					<security:authorize access="isAuthenticated()">
+						<li class="nav-item"><a class="nav-link" href="/user/cart">Giỏ
+								hàng</a></li>
+						<li class="nav-item"><a class="nav-link" href="/user/orders">Đơn
+								hàng</a></li>
+						<li class="nav-item"><a class="nav-link" href="/user/details">Thay
+								đổi thông tin</a></li>
+						<li class="nav-item"><a class="nav-link"
+							onclick="document.getElementById('logout').submit()">Đăng
+								xuất <sec:authentication property="principal.username" />,
+						</a></li>
+						<form action="<c:url value="/logout"/>" id="logout" method="post"
+							style="display: none;">
+							<sec:csrfInput />
+						</form>
+					</security:authorize>
+					<security:authorize access="isAnonymous()">
+						<li class="nav-item"><a class="nav-link"
+							href="<c:url value="/login"/>">Đăng nhập</a></li>
+
+						<li class="nav-item"><a class="nav-link"
+							href="<c:url value="/registration"/>">Đăng kí</a></li>
+					</security:authorize>
+
+				</ul>
+
+			</div>
+		</div>
+
+	</nav>

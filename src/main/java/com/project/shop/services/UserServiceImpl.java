@@ -61,16 +61,23 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void save(User user) {
 			int isRole = 0;
-		for(Role usertype : user.getRoles()) {
-			isRole=usertype.getId();
-		}
-		
-		if(isRole==1) {
-			user.setRoles(new HashSet<>(Arrays.asList(roleRepository.findRoleByUserType(Role.UserTypes.ROLE_ADMIN))));
+			System.out.println("user type " + user.getRoles());
+		if(user.getRoles()!=null) {
+			for(Role usertype : user.getRoles()) {
+				isRole=usertype.getId();
+			}
+			if(isRole==1) {
+				user.setRoles(new HashSet<>(Arrays.asList(roleRepository.findRoleByUserType(Role.UserTypes.ROLE_ADMIN))));
+			}
+			else {
+				user.setRoles(new HashSet<>(Arrays.asList(roleRepository.findRoleByUserType(Role.UserTypes.ROLE_USER))));
+			}
 		}
 		else {
 			user.setRoles(new HashSet<>(Arrays.asList(roleRepository.findRoleByUserType(Role.UserTypes.ROLE_USER))));
+
 		}
+		
 		user.setEnabled(true);
 		user.setPasswordConfirm(null);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));

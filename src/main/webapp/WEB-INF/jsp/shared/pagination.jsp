@@ -32,7 +32,7 @@
         </li>
 
         <c:forEach var="pageIdx" begin="${0}" end="${list.totalPages-1}">
-            <c:url var="pageUrl" value="/${mainUrl}?page=${pageIdx}&size=${list.size}"/>
+            <c:url var="pageUrl" value="${mainUrl}?page=${pageIdx}&size=${list.size}"/>
             <li ${pageIdx == list.number?'class="page-item active"':'page-item'}>
                 <a href="${pageUrl}" class="page-link">${pageIdx+1}</a>
             </li>
